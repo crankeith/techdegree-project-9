@@ -3,7 +3,10 @@
 // load modules
 const express = require('express');
 const morgan = require('morgan');
-
+const Sequelize = require('sequelize');
+const bodyParser = require('body-parser');
+//const { User, Course } = require('./models');
+const routes = require('./routes');
 // variable to enable global error logging
 const enableGlobalErrorLogging = process.env.ENABLE_GLOBAL_ERROR_LOGGING === 'true';
 
@@ -13,7 +16,31 @@ const app = express();
 // setup morgan which gives us http request logging
 app.use(morgan('dev'));
 
-// TODO setup your api routes here
+// setup body parser which will give body back as proper JSON
+app.use(bodyParser.json());
+
+// connect to the database
+const sequelize = new Sequelize({
+  dialect: 'sqlite',
+  storage: './fsjstd-restapi.db'
+});
+
+sequelize
+    .authenticate()
+    .then(() => {
+      console.log('Connection has been established successfully.');
+    }).then(()=>{
+      return sequelize.sync()
+          .then(()=>{
+            console.log('Models have been synced.')
+          });
+    })
+    .catch(err => {
+      console.error('Unable to connect to the database:', err);
+    });
+
+// setup routes
+app.use('/api', routes);
 
 // setup a friendly greeting for the root route
 app.get('/', (req, res) => {
@@ -21,6 +48,7 @@ app.get('/', (req, res) => {
     message: 'Welcome to the REST API project!',
   });
 });
+
 
 // send 404 if no other route matched
 app.use((req, res) => {
