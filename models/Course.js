@@ -31,9 +31,9 @@ Course.init({
     }
 }, {
     sequelize,
-    modelName: 'course'
+    modelName: 'Course'
 });
 
-Course.belongsTo(User);
+//Course.belongsTo(User, {as: 'user', constraints: false});
 
 module.exports = Course;

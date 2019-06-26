@@ -33,9 +33,9 @@ User.init({
     }
 }, {
     sequelize,
-    modelName: 'user'
+    modelName: 'User'
 });
 
-User.hasMany(Course, {as: 'courses'});
+User.hasMany(Course, {as: 'courses', constraints: false});
 
 module.exports = User;

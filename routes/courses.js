@@ -11,7 +11,6 @@ router.get('/', (req, res, next) => {
         },
         include: [{
             model: User,
-            as: "user",
             attributes: {
                 exclude: ['password', 'createdAt', 'updatedAt']
             }
