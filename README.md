@@ -1,6 +1,19 @@
 
 # Full Stack JavaScript Techdegree v2 - REST API Project
 
+## Introduction
+This the project for unit 9 of the Full Stack JS techdegree. It leverages express and sequelize to build a rest api that interacts with a SQLite database. It includes examples of basic authentication, ORM modeling and password hashing.
+
+### Extra Credit
+I've included all 3 extra credit items as indicated in the Project Outline: 
+1. Add additional user email address validations to the POST /api/users route
+2. Ensure that a user can only edit and delete their own courses
+3. Update the Sequelize model queries for the Courses endpoint GET routes to filter out specific properties
+
+### Additional Notes
+- I used the Setter feature of Sequelize to enforce hashing of passwords at the Model level which I felt was more strict. To see my implementation of hashing, just open up the user.js model file.
+- I also return the course information when creating one through the POST route even though it says in the instructions not to. I found it was just easier for testing and can be easily removed.
+
 ## Overview of the Provided Project Files
 
 We've supplied the following files for you to use: 
