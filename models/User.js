@@ -1,41 +1,64 @@
 const Sequelize = require('sequelize');
 const Model = Sequelize.Model;
-const Course = require('./Course');
+const sequelize = require('./db')
 const bcrypt = require('bcryptjs');
 
-const sequelize = new Sequelize({
-    dialect: 'sqlite',
-    storage: './fsjstd-restapi.db'
-});
-
 class User extends Model {}
-
 User.init({
     id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
-        primaryKey: true
+        primaryKey: true,
+        allowNull: false,
+        validate: {
+            notNull: true,
+            notEmpty: true
+        }
     },
     firstName: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
+        validate: {
+            notNull: true,
+            notEmpty: true
+        }
     },
     lastName: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
+        validate: {
+            notNull: true,
+            notEmpty: true
+        }
     },
     emailAddress: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        unique: true,
+        allowNull: false,
+        validate: {
+            isEmail: true,
+            notNull: true,
+            notEmpty: true
+        }
     },
     password: {
         type: Sequelize.STRING,
+        allowNull: false,
+        validate: {
+            notNull: true,
+            notEmpty: true
+        },
         set(val) {
-            this.setDataValue("password", bcrypt.hashSync(val, bcrypt.genSaltSync(10)))
+            if(val){
+                this.setDataValue("password", bcrypt.hashSync(val, bcrypt.genSaltSync(10)))
+            } else { 
+                return null
+            }
         }
     }
 }, {
     sequelize,
     modelName: 'User'
 });
-
-User.hasMany(Course, {as: 'courses', constraints: false});
 
 module.exports = User;

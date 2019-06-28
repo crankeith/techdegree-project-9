@@ -1,14 +1,8 @@
 const Sequelize = require('sequelize');
 const Model = Sequelize.Model;
-const { User } = require('../models');
-
-const sequelize = new Sequelize({
-    dialect: 'sqlite',
-    storage: './fsjstd-restapi.db'
-});
+const sequelize = require('./db')
 
 class Course extends Model {}
-
 Course.init({
     id: {
         type: Sequelize.INTEGER,
@@ -16,10 +10,20 @@ Course.init({
         primaryKey: true
     },
     title: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
+        validate: {
+            notNull: true,
+            notEmpty: true
+        }
     },
     description: {
-        type: Sequelize.TEXT
+        type: Sequelize.TEXT,
+        allowNull: false,
+        validate: {
+            notNull: true,
+            notEmpty: true
+        }
     },
     estimatedTime: {
         type: Sequelize.STRING,
@@ -33,7 +37,5 @@ Course.init({
     sequelize,
     modelName: 'Course'
 });
-
-//Course.belongsTo(User, {as: 'user', constraints: false});
 
 module.exports = Course;

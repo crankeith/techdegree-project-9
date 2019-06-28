@@ -3,7 +3,7 @@
 // load modules
 const express = require('express');
 const morgan = require('morgan');
-const Sequelize = require('sequelize');
+
 const bodyParser = require('body-parser');
 //const { User, Course } = require('./models');
 const routes = require('./routes');
@@ -20,24 +20,7 @@ app.use(morgan('dev'));
 app.use(bodyParser.json());
 
 // connect to the database
-const sequelize = new Sequelize({
-  dialect: 'sqlite',
-  storage: './fsjstd-restapi.db'
-});
-
-sequelize
-    .authenticate()
-    .then(() => {
-      console.log('Connection has been established successfully.');
-    }).then(()=>{
-      return sequelize.sync({force: true})
-          .then(()=>{
-            console.log('Models have been synced.')
-          });
-    })
-    .catch(err => {
-      console.error('Unable to connect to the database:', err);
-    });
+//dbConnect();
 
 // setup routes
 app.use('/api', routes);
@@ -63,6 +46,13 @@ app.use((err, req, res, next) => {
     console.error(`Global error handler: ${JSON.stringify(err.stack)}`);
   }
 
+  //Global logic for Sequelize Errors 
+  if(err.name === 'SequelizeValidationError'){
+      err.status = 400;
+  } else if(err.name === 'SequelizeUniqueConstraintError'){
+      err.status = 400
+      err.message = `${err.errors[0].path} has already been used.`
+  };
   res.status(err.status || 500).json({
     message: err.message,
     error: {},
