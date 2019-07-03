@@ -6,7 +6,7 @@ const User = require('./user');
 
 //MODEL ASSOCIATIONS
 User.hasMany(Course);
-Course.belongsTo(User, { constraints: false });
+Course.belongsTo(User, { foreignKey: 'userId', constraints: false });
 
 //VALIDATE CONNECTION AND SYNCRONIZE MODELS
 sequelize

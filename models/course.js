@@ -32,6 +32,10 @@ Course.init({
     materialsNeeded: {
         type: Sequelize.STRING,
         allowNull: true
+    },
+    userId: {
+        type: Sequelize.INTEGER,
+        allowNull: false
     }
 }, {
     sequelize,
