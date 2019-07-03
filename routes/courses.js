@@ -43,10 +43,11 @@ router.post('/', authenticate, (req, res, next) => {
     Course.create(
         { 
             title, description, materialsNeeded, estimatedTime,
-            UserId: req.authenticatedUser.id
+            userId: req.authenticatedUser.id
         }
     ).then((course) => {
-        res.status(201).json(course);
+        //Set Location header to root and status to 201
+        res.location('/').status(201).json(course);
     }).catch(err => {
         next(err);
     })
@@ -105,7 +106,7 @@ router.put('/:id', authenticate, (req, res, next) => {
                         title, description, estimatedTime, materialsNeeded
                     })
                         .then(() => {
-                            res.status(200).end();
+                            res.status(204).end();
                         })
                         .catch( err => {
                             next(err);
@@ -143,7 +144,7 @@ router.delete('/:id', authenticate, (req, res) => {
                 if( course.User.id === req.authenticatedUser.id){
                     course.destroy({ force: true })
                         .then(() => {
-                            res.status(200).end();
+                            res.status(204).end();
                         })
                         .catch( err => {
                             next(err);
